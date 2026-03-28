@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="900" viewBox="0 0 1400 900" role="img" aria-labelledby="title desc">
+  <title id="title">Database ER Diagram</title>
+  <desc id="desc">ER diagram showing users, tasks, and audit_logs tables with foreign key relationships.</desc>
+  <defs>
+    <style>
+      .bg { fill: #0b0f18; }
+      .grid { stroke: #1b2434; stroke-width: 1; opacity: 0.45; }
+      .table { fill: #111827; stroke: #334155; stroke-width: 2; rx: 14; }
+      .head { fill: #0f172a; }
+      .title { fill: #e2e8f0; font: 700 28px 'Segoe UI', Arial, sans-serif; }
+      .cell { fill: #cbd5e1; font: 500 20px 'Segoe UI', Arial, sans-serif; }
+      .type { fill: #94a3b8; font: 500 18px 'Segoe UI', Arial, sans-serif; }
+      .line { stroke: #94a3b8; stroke-width: 3; stroke-dasharray: 10 10; fill: none; }
+      .badge { fill: #22c55e; }
+      .badgeText { fill: #052e16; font: 700 13px 'Segoe UI', Arial, sans-serif; }
+    </style>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="1400" height="900"/>
+
+  <g opacity="0.4">
+    <path class="grid" d="M0 50H1400 M0 100H1400 M0 150H1400 M0 200H1400 M0 250H1400 M0 300H1400 M0 350H1400 M0 400H1400 M0 450H1400 M0 500H1400 M0 550H1400 M0 600H1400 M0 650H1400 M0 700H1400 M0 750H1400 M0 800H1400 M0 850H1400"/>
+    <path class="grid" d="M50 0V900 M100 0V900 M150 0V900 M200 0V900 M250 0V900 M300 0V900 M350 0V900 M400 0V900 M450 0V900 M500 0V900 M550 0V900 M600 0V900 M650 0V900 M700 0V900 M750 0V900 M800 0V900 M850 0V900 M900 0V900 M950 0V900 M1000 0V900 M1050 0V900 M1100 0V900 M1150 0V900 M1200 0V900 M1250 0V900 M1300 0V900 M1350 0V900"/>
+  </g>
+
+  <!-- audit_logs -->
+  <g transform="translate(90,90)">
+    <rect class="table" width="520" height="360" rx="14"/>
+    <rect class="head" width="520" height="58" rx="14"/>
+    <text class="title" x="24" y="39">audit_logs</text>
+
+    <text class="cell" x="24" y="96">id</text><text class="type" x="420" y="96">uuid</text>
+    <text class="cell" x="24" y="136">user_id</text><text class="type" x="420" y="136">uuid</text>
+    <text class="cell" x="24" y="176">action</text><text class="type" x="420" y="176">varchar</text>
+    <text class="cell" x="24" y="216">entity</text><text class="type" x="420" y="216">varchar</text>
+    <text class="cell" x="24" y="256">entity_id</text><text class="type" x="420" y="256">uuid</text>
+    <text class="cell" x="24" y="296">details</text><text class="type" x="420" y="296">jsonb</text>
+    <text class="cell" x="24" y="336">ip_address</text><text class="type" x="420" y="336">varchar</text>
+  </g>
+
+  <!-- tasks -->
+  <g transform="translate(90,500)">
+    <rect class="table" width="520" height="320" rx="14"/>
+    <rect class="head" width="520" height="58" rx="14"/>
+    <text class="title" x="24" y="39">tasks</text>
+
+    <text class="cell" x="24" y="96">id</text><text class="type" x="420" y="96">uuid</text>
+    <text class="cell" x="24" y="136">user_id</text><text class="type" x="420" y="136">uuid</text>
+    <text class="cell" x="24" y="176">title</text><text class="type" x="420" y="176">varchar</text>
+    <text class="cell" x="24" y="216">description</text><text class="type" x="420" y="216">text</text>
+    <text class="cell" x="24" y="256">status</text><text class="type" x="420" y="256">varchar</text>
+    <text class="cell" x="24" y="296">priority</text><text class="type" x="420" y="296">varchar</text>
+  </g>
+
+  <!-- users -->
+  <g transform="translate(790,260)">
+    <rect class="table" width="520" height="470" rx="14"/>
+    <rect class="head" width="520" height="58" rx="14"/>
+    <text class="title" x="24" y="39">users</text>
+
+    <text class="cell" x="24" y="96">id</text><text class="type" x="420" y="96">uuid</text>
+    <text class="cell" x="24" y="136">username</text><text class="type" x="420" y="136">varchar</text>
+    <text class="cell" x="24" y="176">email</text><text class="type" x="420" y="176">varchar</text>
+    <text class="cell" x="24" y="216">password_hash</text><text class="type" x="420" y="216">varchar</text>
+    <text class="cell" x="24" y="256">role</text><text class="type" x="420" y="256">varchar</text>
+    <text class="cell" x="24" y="296">is_active</text><text class="type" x="420" y="296">bool</text>
+    <text class="cell" x="24" y="336">created_at</text><text class="type" x="420" y="336">timestamp</text>
+    <text class="cell" x="24" y="376">updated_at</text><text class="type" x="420" y="376">timestamp</text>
+
+    <rect class="badge" x="365" y="20" width="130" height="26" rx="13"/>
+    <text class="badgeText" x="379" y="38">PK: id</text>
+  </g>
+
+  <!-- relationships -->
+  <path class="line" d="M610 225 C700 225, 700 330, 790 330"/>
+  <path class="line" d="M610 635 C700 635, 700 410, 790 410"/>
+
+  <text x="640" y="214" class="type">audit_logs.user_id → users.id</text>
+  <text x="640" y="624" class="type">tasks.user_id → users.id</text>
+</svg>

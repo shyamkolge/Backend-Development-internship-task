@@ -84,6 +84,8 @@ UI flows:
 
 ## Database Schema
 
+![Database ER Diagram](backend/docs/images/database-er-diagram.svg)
+
 Schema file:
 - src/models/database-initialization.sql
 
