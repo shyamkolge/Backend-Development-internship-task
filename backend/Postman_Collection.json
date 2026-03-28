@@ -1,0 +1,112 @@
+{
+  "info": {
+    "name": "Auth API Collection",
+    "description": "Postman collection for testing Scalable REST API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"username\": \"test_user\", \"email\": \"test@example.com\", \"password\": \"Password123\", \"confirmPassword\": \"Password123\"}"
+            },
+            "url": {"raw": "http://localhost:5000/api/v1/auth/register", "protocol": "http", "host": ["localhost"], "port": ["5000"], "path": ["api", "v1", "auth", "register"]}
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"email\": \"admin@example.com\", \"password\": \"admin123\"}"
+            },
+            "url": {"raw": "http://localhost:5000/api/v1/auth/login", "protocol": "http", "host": ["localhost"], "port": ["5000"], "path": ["api", "v1", "auth", "login"]}
+          }
+        },
+        {
+          "name": "Get Current User",
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Authorization", "value": "Bearer YOUR_TOKEN"}],
+            "url": {"raw": "http://localhost:5000/api/v1/auth/me", "protocol": "http", "host": ["localhost"], "port": ["5000"], "path": ["api", "v1", "auth", "me"]}
+          }
+        }
+      ]
+    },
+    {
+      "name": "Tasks",
+      "item": [
+        {
+          "name": "Get All Tasks",
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Authorization", "value": "Bearer YOUR_TOKEN"}],
+            "url": {"raw": "http://localhost:5000/api/v1/tasks", "protocol": "http", "host": ["localhost"], "port": ["5000"], "path": ["api", "v1", "tasks"]}
+          }
+        },
+        {
+          "name": "Create Task",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}, {"key": "Authorization", "value": "Bearer YOUR_TOKEN"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\": \"Test Task\", \"description\": \"Task description\", \"priority\": \"high\"}"
+            },
+            "url": {"raw": "http://localhost:5000/api/v1/tasks", "protocol": "http", "host": ["localhost"], "port": ["5000"], "path": ["api", "v1", "tasks"]}
+          }
+        },
+        {
+          "name": "Get Task by ID",
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Authorization", "value": "Bearer YOUR_TOKEN"}],
+            "url": {"raw": "http://localhost:5000/api/v1/tasks/:id", "protocol": "http", "host": ["localhost"], "port": ["5000"], "path": ["api", "v1", "tasks", ":id"]}
+          }
+        },
+        {
+          "name": "Update Task",
+          "request": {
+            "method": "PUT",
+            "header": [{"key": "Content-Type", "value": "application/json"}, {"key": "Authorization", "value": "Bearer YOUR_TOKEN"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"status\": \"completed\", \"priority\": \"medium\"}"
+            },
+            "url": {"raw": "http://localhost:5000/api/v1/tasks/:id", "protocol": "http", "host": ["localhost"], "port": ["5000"], "path": ["api", "v1", "tasks", ":id"]}
+          }
+        },
+        {
+          "name": "Delete Task",
+          "request": {
+            "method": "DELETE",
+            "header": [{"key": "Authorization", "value": "Bearer YOUR_TOKEN"}],
+            "url": {"raw": "http://localhost:5000/api/v1/tasks/:id", "protocol": "http", "host": ["localhost"], "port": ["5000"], "path": ["api", "v1", "tasks", ":id"]}
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin",
+      "item": [
+        {
+          "name": "Dashboard Stats (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Authorization", "value": "Bearer YOUR_ADMIN_TOKEN"}],
+            "url": {"raw": "http://localhost:5000/api/v1/admin/dashboard", "protocol": "http", "host": ["localhost"], "port": ["5000"], "path": ["api", "v1", "admin", "dashboard"]}
+          }
+        }
+      ]
+    }
+  ]
+}
