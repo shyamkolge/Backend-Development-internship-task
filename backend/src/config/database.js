@@ -8,7 +8,7 @@ const pool = process.env.DATABASE_URL
       connectionString: process.env.DATABASE_URL,
       max: 20,
       idleTimeoutMillis: 30000,
-      connectionTimeoutMillis: 2000,
+      connectionTimeoutMillis: 10000,
       ssl: { rejectUnauthorized: false }, // Required for Supabase
     })
   : new Pool({
@@ -19,7 +19,7 @@ const pool = process.env.DATABASE_URL
       password: process.env.DB_PASSWORD || 'password',
       max: 20,
       idleTimeoutMillis: 30000,
-      connectionTimeoutMillis: 2000,
+      connectionTimeoutMillis: 10000,
     });
 
 pool.on('error', (err) => {
