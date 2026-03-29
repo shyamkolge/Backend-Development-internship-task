@@ -6,19 +6,25 @@ const logger = require('../utils/logger');
 const REFRESH_COOKIE_NAME = 'refreshToken';
 const ACCESS_COOKIE_NAME = 'accessToken';
 
-const getCookieOptions = () => {
-  const isProduction = process.env.NODE_ENV === 'production';
+const isSecureRequest = (req) => {
+  const forwardedProto = req.headers['x-forwarded-proto'];
+  const protocol = forwardedProto ? String(forwardedProto).split(',')[0].trim() : req.protocol;
+  return protocol === 'https';
+};
+
+const getCookieOptions = (req) => {
+  const useSecureCookies = process.env.COOKIE_SECURE === 'true' || isSecureRequest(req);
   return {
     httpOnly: true,
-    secure: isProduction,
-    sameSite: isProduction ? 'none' : 'lax',
+    secure: useSecureCookies,
+    sameSite: useSecureCookies ? 'none' : 'lax',
     path: '/api/v1/auth',
     maxAge: 14 * 24 * 60 * 60 * 1000,
   };
 };
 
-const getAccessCookieOptions = () => {
-  const baseOptions = getCookieOptions();
+const getAccessCookieOptions = (req) => {
+  const baseOptions = getCookieOptions(req);
   return {
     ...baseOptions,
     path: '/api/v1',
@@ -45,12 +51,12 @@ const createRefreshToken = (user) => jwt.sign(
   { expiresIn: process.env.REFRESH_TOKEN_EXPIRES_IN || '14d' }
 );
 
-const setRefreshTokenCookie = (res, refreshToken) => {
-  res.cookie(REFRESH_COOKIE_NAME, refreshToken, getCookieOptions());
+const setRefreshTokenCookie = (req, res, refreshToken) => {
+  res.cookie(REFRESH_COOKIE_NAME, refreshToken, getCookieOptions(req));
 };
 
-const setAccessTokenCookie = (res, accessToken) => {
-  res.cookie(ACCESS_COOKIE_NAME, accessToken, getAccessCookieOptions());
+const setAccessTokenCookie = (req, res, accessToken) => {
+  res.cookie(ACCESS_COOKIE_NAME, accessToken, getAccessCookieOptions(req));
 };
 
 /**
@@ -207,8 +213,8 @@ const login = async (req, res) => {
 
     const token = createAccessToken(user);
     const refreshToken = createRefreshToken(user);
-    setAccessTokenCookie(res, token);
-    setRefreshTokenCookie(res, refreshToken);
+    setAccessTokenCookie(req, res, token);
+    setRefreshTokenCookie(req, res, refreshToken);
 
     res.json({
       success: true,
@@ -331,8 +337,8 @@ const refreshToken = async (req, res) => {
 
     const nextAccessToken = createAccessToken(user);
     const nextRefreshToken = createRefreshToken(user);
-    setAccessTokenCookie(res, nextAccessToken);
-    setRefreshTokenCookie(res, nextRefreshToken);
+    setAccessTokenCookie(req, res, nextAccessToken);
+    setRefreshTokenCookie(req, res, nextRefreshToken);
 
     res.json({
       success: true,
@@ -342,8 +348,8 @@ const refreshToken = async (req, res) => {
       },
     });
   } catch (error) {
-    res.clearCookie(ACCESS_COOKIE_NAME, getAccessCookieOptions());
-    res.clearCookie(REFRESH_COOKIE_NAME, getCookieOptions());
+    res.clearCookie(ACCESS_COOKIE_NAME, getAccessCookieOptions(req));
+    res.clearCookie(REFRESH_COOKIE_NAME, getCookieOptions(req));
     return res.status(401).json({
       success: false,
       message: 'Refresh token is invalid or expired. Please log in again.',
@@ -362,8 +368,8 @@ const refreshToken = async (req, res) => {
  *         description: Logout successful
  */
 const logout = async (req, res) => {
-  res.clearCookie(ACCESS_COOKIE_NAME, getAccessCookieOptions());
-  res.clearCookie(REFRESH_COOKIE_NAME, getCookieOptions());
+  res.clearCookie(ACCESS_COOKIE_NAME, getAccessCookieOptions(req));
+  res.clearCookie(REFRESH_COOKIE_NAME, getCookieOptions(req));
   res.json({
     success: true,
     message: 'Logged out successfully.',

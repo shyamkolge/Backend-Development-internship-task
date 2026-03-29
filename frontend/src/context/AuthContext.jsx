@@ -19,7 +19,12 @@ export function AuthProvider({ children }) {
 
   const login = useCallback(async (formData) => {
     await api.login(formData);
-    return loadCurrentUser();
+    try {
+      return await loadCurrentUser();
+    } catch {
+      await api.refreshToken();
+      return loadCurrentUser();
+    }
   }, [loadCurrentUser]);
 
   const register = useCallback((formData) => api.register(formData), []);
@@ -40,13 +45,10 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     const bootstrap = async () => {
       try {
-        await loadCurrentUser();
+        // Refresh first so startup can succeed even when access token expired.
+        await refresh();
       } catch {
-        try {
-          await refresh();
-        } catch {
-          clearSession();
-        }
+        clearSession();
       } finally {
         setInitializing(false);
       }
