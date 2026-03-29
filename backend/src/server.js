@@ -16,12 +16,16 @@ const adminRoutes = require('./routes/adminRoutes');
 
 const app = express();
 
+// Trust proxy headers in hosted environments (e.g. Render) to resolve https correctly.
+app.set('trust proxy', 1);
+
 // Middleware
 app.use(helmet());
 app.use(cors({
   origin: process.env.FRONTEND_URL || 'http://localhost:3000',
   credentials: true,
 }));
+
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -42,8 +46,8 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: `http://localhost:${process.env.PORT || 5000}`,
-        description: 'Development server',
+        url: '/',
+        description: 'Current server',
       },
     ],
     components: {
@@ -63,8 +67,27 @@ const swaggerOptions = {
 };
 
 const swaggerDocs = swaggerJsdoc(swaggerOptions);
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs, {
+
+app.get('/api-docs.json', (req, res) => {
+  const forwardedProto = req.headers['x-forwarded-proto'];
+  const protocol = forwardedProto ? String(forwardedProto).split(',')[0].trim() : req.protocol;
+  const host = req.get('host');
+  const baseUrl = `${protocol}://${host}`;
+
+  res.json({
+    ...swaggerDocs,
+    servers: [
+      {
+        url: baseUrl,
+        description: 'Current server',
+      },
+    ],
+  });
+});
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(null, {
   swaggerOptions: {
+    url: '/api-docs.json',
     persistAuthorization: true,
   },
 }));
@@ -105,6 +128,7 @@ app.use((err, req, res, next) => {
     path: req.originalUrl,
     method: req.method,
   });
+  
   res.status(err.status || 500).json({
     success: false,
     message: err.message || 'Internal server error',
