@@ -1,3 +1,6 @@
+Frontend URL: https://backend-development-internship-task.vercel.app/tasks
+Backend API Docs URL: https://backend-development-internship-task.onrender.com/api-docs/
+
 # Full-Stack Auth + RBAC Task Manager
 
 This repository contains a backend API and a frontend app with:
